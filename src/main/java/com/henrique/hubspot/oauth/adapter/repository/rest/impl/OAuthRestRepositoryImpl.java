@@ -1,7 +1,7 @@
 package com.henrique.hubspot.oauth.adapter.repository.rest.impl;
 
 import com.henrique.hubspot.oauth.adapter.repository.rest.OAuthRestRepositoty;
-import com.henrique.hubspot.oauth.adapter.repository.rest.dto.TokenResponseDto;
+import com.henrique.hubspot.oauth.adapter.repository.rest.dto.TokenRestResponseDto;
 import com.henrique.hubspot.oauth.domain.Token;
 import com.henrique.hubspot.oauth.usecase.exception.HubspotOAuthException;
 import lombok.RequiredArgsConstructor;
@@ -42,15 +42,15 @@ public class OAuthRestRepositoryImpl implements OAuthRestRepositoty {
 		formData.add("code", code);
 
 		try {
-			TokenResponseDto response = webClientHubspot.post()
+			TokenRestResponseDto response = webClientHubspot.post()
 					.uri("/oauth/v1/token")
 					.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 					.body(BodyInserters.fromFormData(formData))
 					.retrieve()
-					.bodyToMono(TokenResponseDto.class)
+					.bodyToMono(TokenRestResponseDto.class)
 					.retryWhen(Retry.backoff(3, Duration.ofSeconds(2)).jitter(0.75))
 					.block();
-			
+
 			return response.toDomain();
 		} catch (Exception e) {
 			log.error("Error on code exchange with hubspot raised: ", e);

@@ -1,6 +1,7 @@
 package com.henrique.hubspot.application.spring.handler;
 
 import com.henrique.hubspot.application.spring.handler.dto.FieldErrorDto;
+import com.henrique.hubspot.contact.usecase.exception.HubSpotCreateContactException;
 import com.henrique.hubspot.oauth.usecase.exception.HubspotOAuthException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class SpringControllerAdviceHandler {
 		return problemDetail;
 	}
 
-	@ExceptionHandler(HubspotOAuthException.class)
+	@ExceptionHandler(HubSpotCreateContactException.class)
 	public ProblemDetail handleHubspotOAuthException(HubspotOAuthException ex, HttpServletRequest request) {
 		log.error("Request: {} raised: {}", request.getRequestURI(), ex.getMessage(), ex);
 
@@ -45,10 +46,9 @@ public class SpringControllerAdviceHandler {
 
 		problemDetail.setTitle("HubSpot Integration Error");
 		problemDetail.setInstance(URI.create(request.getRequestURI()));
-		problemDetail.setDetail("Failed to exchange authorization code for access token with HubSpot.");
+		problemDetail.setDetail("Failed create new contact with HubSpot.");
 		problemDetail.setProperty("integration", "hubspot");
 
 		return problemDetail;
 	}
-
 }
