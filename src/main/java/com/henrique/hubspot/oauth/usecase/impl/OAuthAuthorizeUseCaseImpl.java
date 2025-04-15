@@ -24,7 +24,8 @@ public class OAuthAuthorizeUseCaseImpl implements OAuthAuthorizeUseCase {
 	@Override
 	public Authorize authorize() {
 		String encodedRedirectUri = URLEncoder.encode(REDIRECT_URI, StandardCharsets.UTF_8);
-		String encodedScopes = URLEncoder.encode("crm.objects.contacts.read crm.objects.contacts.write",
+		String encodedScopes = URLEncoder.encode(
+				"crm.objects.contacts.write crm.schemas.contacts.write crm.objects.contacts.read",
 				StandardCharsets.UTF_8);
 		String url = UriComponentsBuilder.fromUriString(HUBSPOT_AUTHORIZATION_URL)
 				.queryParam("client_id", clientId)

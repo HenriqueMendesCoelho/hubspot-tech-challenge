@@ -9,4 +9,6 @@ public interface TokenDBRepository {
 	List<Token> findAll();
 
 	Token save(Token token);
+
+	void deleteAll();
 }

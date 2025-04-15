@@ -15,6 +15,11 @@ public class CreateContactUseCaseImpl implements CreateContactUseCase {
 
 	@Override
 	public Contact execute(Contact contact) throws HubSpotCreateContactException {
-		return repository.createContact(contact);
+		Contact result = repository.createContact(contact);
+		if (result == null) {
+			throw new HubSpotCreateContactException();
+		}
+
+		return result;
 	}
 }

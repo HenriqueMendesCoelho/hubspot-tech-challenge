@@ -2,7 +2,6 @@ package com.henrique.hubspot.application.spring.handler;
 
 import com.henrique.hubspot.application.spring.handler.dto.FieldErrorDto;
 import com.henrique.hubspot.contact.usecase.exception.HubSpotCreateContactException;
-import com.henrique.hubspot.oauth.usecase.exception.HubspotOAuthException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -39,7 +38,8 @@ public class SpringControllerAdviceHandler {
 	}
 
 	@ExceptionHandler(HubSpotCreateContactException.class)
-	public ProblemDetail handleHubspotOAuthException(HubspotOAuthException ex, HttpServletRequest request) {
+	public ProblemDetail handleHubSpotCreateContactException(HubSpotCreateContactException ex,
+			HttpServletRequest request) {
 		log.error("Request: {} raised: {}", request.getRequestURI(), ex.getMessage(), ex);
 
 		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_GATEWAY, ex.getMessage());

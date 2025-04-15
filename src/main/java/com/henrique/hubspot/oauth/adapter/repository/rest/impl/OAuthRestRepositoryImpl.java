@@ -40,6 +40,31 @@ public class OAuthRestRepositoryImpl implements OAuthRestRepositoty {
 		formData.add("client_secret", clientSecret);
 		formData.add("redirect_uri", REDIRECT_URI);
 		formData.add("code", code);
+		
+		try {
+			TokenRestResponseDto response = webClientHubspot.post()
+					.uri("/oauth/v1/token")
+					.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+					.body(BodyInserters.fromFormData(formData))
+					.retrieve()
+					.bodyToMono(TokenRestResponseDto.class)
+					.retryWhen(Retry.backoff(3, Duration.ofSeconds(1)).jitter(0.75))
+					.block();
+
+			return response.toDomain();
+		} catch (Exception e) {
+			log.error("Error on code exchange with hubspot raised: ", e);
+			throw new HubspotOAuthException();
+		}
+	}
+
+	@Override
+	public Token refreshToken(String refreshToken) throws HubspotOAuthException {
+		MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+		formData.add("grant_type", "refresh_token");
+		formData.add("refresh_token", refreshToken);
+		formData.add("client_id", clientId);
+		formData.add("client_secret", clientSecret);
 
 		try {
 			TokenRestResponseDto response = webClientHubspot.post()
@@ -48,7 +73,7 @@ public class OAuthRestRepositoryImpl implements OAuthRestRepositoty {
 					.body(BodyInserters.fromFormData(formData))
 					.retrieve()
 					.bodyToMono(TokenRestResponseDto.class)
-					.retryWhen(Retry.backoff(3, Duration.ofSeconds(2)).jitter(0.75))
+					.retryWhen(Retry.backoff(3, Duration.ofSeconds(1)).jitter(0.75))
 					.block();
 
 			return response.toDomain();

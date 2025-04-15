@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "tokens")
@@ -26,13 +29,24 @@ public class TokenJpaEntity {
 	@Column
 	private Long expiresIn;
 
+	@CreationTimestamp
+	@Column
+	private Timestamp createdAt;
+
 	public TokenJpaEntity(Token token) {
 		this.token = token.getAccessToken();
 		this.refreshToken = token.getRefreshToken();
 		this.expiresIn = token.getExpiresIn();
+		this.createdAt = token.getCreatedAt();
 	}
 
 	public Token toDomain() {
-		return Token.builder().id(id).accessToken(token).refreshToken(refreshToken).expiresIn(expiresIn).build();
+		return Token.builder()
+				.id(id)
+				.accessToken(token)
+				.refreshToken(refreshToken)
+				.expiresIn(expiresIn)
+				.createdAt(createdAt)
+				.build();
 	}
 }

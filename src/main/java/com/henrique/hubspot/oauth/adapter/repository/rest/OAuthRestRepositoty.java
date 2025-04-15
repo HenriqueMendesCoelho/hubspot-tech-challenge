@@ -7,4 +7,5 @@ public interface OAuthRestRepositoty {
 
 	Token exchangeCode(String code) throws HubspotOAuthException;
 
+	Token refreshToken(String refreshToken) throws HubspotOAuthException;
 }

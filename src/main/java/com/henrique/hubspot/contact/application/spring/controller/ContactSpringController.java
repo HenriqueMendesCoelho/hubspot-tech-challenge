@@ -3,6 +3,7 @@ package com.henrique.hubspot.contact.application.spring.controller;
 import com.henrique.hubspot.contact.adapter.controller.ContactController;
 import com.henrique.hubspot.contact.adapter.controller.dto.ContactRequestDto;
 import com.henrique.hubspot.contact.adapter.controller.dto.ContactResponseDto;
+import com.henrique.hubspot.contact.usecase.exception.HubSpotCreateContactException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,8 @@ public class ContactSpringController {
 	private final ContactController controller;
 
 	@PostMapping
-	public ResponseEntity<ContactResponseDto> createContact(@RequestBody @Valid ContactRequestDto request) {
+	public ResponseEntity<ContactResponseDto> createContact(@RequestBody @Valid ContactRequestDto request)
+			throws HubSpotCreateContactException {
 		ContactResponseDto response = controller.create(request);
 
 		return ResponseEntity.ok(response);

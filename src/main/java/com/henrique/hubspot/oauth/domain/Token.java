@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Builder
 @Data
 @AllArgsConstructor
@@ -15,5 +17,6 @@ public class Token {
 	private String accessToken;
 	private String refreshToken;
 	private Long expiresIn;
+	private Timestamp createdAt;
 
 }

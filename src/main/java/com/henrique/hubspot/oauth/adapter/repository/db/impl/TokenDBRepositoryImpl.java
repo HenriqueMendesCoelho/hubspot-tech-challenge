@@ -24,4 +24,9 @@ public class TokenDBRepositoryImpl implements TokenDBRepository {
 	public Token save(Token token) {
 		return repository.save(new TokenJpaEntity(token)).toDomain();
 	}
+
+	@Override
+	public void deleteAll() {
+		repository.deleteAll();
+	}
 }
