@@ -33,10 +33,11 @@ Trata-se de uma aplicação **Java + Spring Boot** que implementa uma integraç�
    cd hubspot-tech-challenge
    ```
 
-2. Configure seu `application.properties` com as credenciais do HubSpot:
+2. Configure seu `application.properties` com as credenciais do HubSpot ou as respectivas váriaveis de ambiente:
    ```properties
    hubspot.clientid=SEU_CLIENT_ID
    hubspot.clientsecret=SEU_CLIENT_SECRET
+   hubspot.api.url=https://api.hubapi.com
    ```
 
 3. Execute a aplicação:
@@ -54,18 +55,18 @@ Trata-se de uma aplicação **Java + Spring Boot** que implementa uma integraç�
 
 ## 🔀 Fluxo OAuth
 
-1. Requisição à URL de autorização (`GET /oauth/authorize-url`)
+1. Requisição à URL de autorização (`GET /api/hubspot/authorize`)
 2. Usuário é redirecionado ao HubSpot para login e consentimento
-3. HubSpot chama seu endpoint de callback (`/oauth/callback`)
+3. HubSpot chama seu endpoint de callback (`/api/hubspot/callback`)
 4. Sua aplicação troca o `code` pelo `access_token` e armazena com o `refresh_token`
 
 ---
 
 ## 📬 Webhook
 
-- Endpoint: `POST /webhook/hubspot`
+- Endpoint: `POST /hubspot/webhook`
 - Eventos processados: `contact.creation`
-- Inclui validação básica de origem (pode ser expandida com verificação de assinatura HMAC)
+- Armazena os eventos no banco de dados H2 em mémoria
 
 ---
 
@@ -81,7 +82,7 @@ Trata-se de uma aplicação **Java + Spring Boot** que implementa uma integraç�
 
 ## 💡 Decisões Técnicas
 
-- Utilização de **Spring Boot** por familiaridade, robustez e suporte nativo ao OAuth
+- Utilização de **Spring Boot** por familiaridade, robustez
 - **H2 Database** foi adotado para persistência temporária dos tokens, permitindo reuso e refresh
 - A arquitetura foi dividida em camadas (controller, usecase, repository) visando clareza e manutenção futura
 
